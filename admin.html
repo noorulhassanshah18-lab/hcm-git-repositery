@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCM Lite - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-weight: 500;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 16px !important;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            font-weight: 600;
+            border-radius: 10px;
+            margin-bottom: 5px;
+        }
+        /* Colorful soft rounded statistic backgrounds */
+        .stat-card-blue { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #0369a1; }
+        .stat-card-yellow { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #b45309; }
+        .stat-card-red { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); color: #b91c1c; }
+        .stat-card-gray { background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: #475569; }
+
+        /* Colorful Rounded Heading Background Style */
+        .page-header-box {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #ffffff;
+            padding: 1.5rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.25);
+        }
+        .page-header-box h1 {
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        table th {
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        table td {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse p-3 shadow">
+                <div class="d-flex align-items-center mb-4 text-white px-2">
+                    <i class="bi bi-building fs-3 me-2 text-info"></i>
+                    <h4 class="m-0 fw-bold tracking-wide">HCM Lite</h4>
+                </div>
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item"><a href="admin.html" class="nav-link active bg-primary text-white"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a></li>
+                    <li class="nav-item"><a href="employees.html" class="nav-link text-white-50"><i class="bi bi-people me-2"></i> Employees</a></li>
+                    <li class="nav-item"><a href="leaves.html" class="nav-link text-white-50"><i class="bi bi-calendar-check me-2"></i> Leave Requests</a></li>
+                    <li class="nav-item"><a href="settings.html" class="nav-link text-white-50"><i class="bi bi-gear me-2"></i> Settings</a></li>
+                    <li class="nav-item mt-5"><a href="index.html" class="nav-link text-danger fw-bold"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Dashboard Area -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                
+                <!-- Colorful Rounded Heading Container -->
+                <div class="page-header-box d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h2 m-0 text-white">Admin Dashboard</h1>
+                        <p class="m-0 text-white-50 small mt-1">Welcome back, monitor daily attendance and system overview.</p>
+                    </div>
+                    <span class="badge bg-white text-primary px-3 py-2 fs-6 rounded-pill shadow-sm fw-bold">Role: Administrator</span>
+                </div>
+
+                <!-- Stats Summary with Bold Rounded Colorful Backgrounds -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card stat-card-blue p-4 shadow-sm">
+                            <span class="small fw-bold text-uppercase">Present Today</span>
+                            <h1 class="fw-extrabold display-5 m-0 mt-2" id="statPresent">0</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card-yellow p-4 shadow-sm">
+                            <span class="small fw-bold text-uppercase">On Leave Today</span>
+                            <h1 class="fw-extrabold display-5 m-0 mt-2" id="statLeave">0</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card-red p-4 shadow-sm">
+                            <span class="small fw-bold text-uppercase">Late Arrivals</span>
+                            <h1 class="fw-extrabold display-5 m-0 mt-2" id="statLate">0</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card-gray p-4 shadow-sm">
+                            <span class="small fw-bold text-uppercase">Absent Today</span>
+                            <h1 class="fw-extrabold display-5 m-0 mt-2" id="statAbsent">0</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Attendance Overview Table (40 Employees) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3 px-4 d-flex justify-content-between align-items-center border-0">
+                        <h4 class="m-0 fw-bold text-dark">Today's Attendance Log (All 40 Employees)</h4>
+                        <input type="text" id="attendanceSearch" class="form-control w-25 fw-semibold rounded-pill px-3" placeholder="🔍 Search employee...">
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                            <table class="table table-hover align-middle m-0" id="attendanceTable">
+                                <thead class="table-dark sticky-top">
+                                    <tr>
+                                        <th class="ps-4">Employee</th>
+                                        <th>Department</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th class="pe-4">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated dynamically via script -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Smart Helper Box -->
+                <div class="card shadow-sm p-4 bg-white">
+                    <h4 class="card-title text-primary fw-bold mb-3"><i class="bi bi-robot me-2"></i> Smart System Helper</h4>
+                    <div class="chat-container p-3 mb-3 fw-semibold">
+                        <div class="d-flex mb-2">
+                            <div class="chat-bubble-ai p-3 rounded-4 shadow-sm bg-light text-dark">
+                                Hello Admin! Ask me questions about today's 40 employee records, attendance, or leave status.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="form-control form-control-lg fw-semibold" placeholder="Type your query (e.g., How many absent today?)...">
+                        <button class="btn btn-primary px-4 fw-bold" type="button">Ask AI</button>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Script to Generate 40 Employees & Update Counters -->
+    <script>
+        const departments = ['Engineering', 'Marketing', 'HR', 'Finance', 'Operations', 'Sales'];
+        const firstNames = ['Alex', 'Sarah', 'Michael', 'Emily', 'David', 'Jessica', 'James', 'Amanda', 'Robert', 'Lisa', 'William', 'Ashley', 'John', 'Megan', 'Brian', 'Rachel', 'Kevin', 'Laura', 'Thomas', 'Nicole'];
+        const lastNames = ['Johnson', 'Smith', 'Brown', 'Davis', 'Wilson', 'Miller', 'Taylor', 'Anderson', 'Thomas', 'Jackson', 'White', 'Harris', 'Martin', 'Garcia', 'Martinez', 'Robinson', 'Clark', 'Rodriguez', 'Lewis', 'Lee'];
+
+        const tableBody = document.querySelector('#attendanceTable tbody');
+        let employeesData = [];
+
+        let presentCount = 0;
+        let leaveCount = 0;
+        let lateCount = 0;
+        let absentCount = 0;
+
+        // Generate 40 employees
+        for (let i = 1; i <= 40; i++) {
+            const name = `${firstNames[(i - 1) % firstNames.length]} ${lastNames[Math.floor((i - 1) / firstNames.length) % lastNames.length]} (${i})`;
+            const dept = departments[(i * 3) % departments.length];
+            
+            let statusBadge = '<span class="badge bg-success px-3 py-2 rounded-pill">Present</span>';
+            let checkIn = '08:50 AM';
+            let checkOut = '05:00 PM';
+
+            if (i % 10 === 0) {
+                statusBadge = '<span class="badge bg-secondary px-3 py-2 rounded-pill">Absent</span>';
+                checkIn = '--';
+                checkOut = '--';
+                absentCount++;
+            } else if (i % 7 === 0) {
+                statusBadge = '<span class="badge bg-warning text-dark px-3 py-2 rounded-pill">On Leave</span>';
+                checkIn = '--';
+                checkOut = '--';
+                leaveCount++;
+            } else if (i % 6 === 0) {
+                statusBadge = '<span class="badge bg-danger px-3 py-2 rounded-pill">Late</span>';
+                checkIn = '09:35 AM';
+                checkOut = '05:00 PM';
+                lateCount++;
+            } else {
+                presentCount++;
+            }
+
+            employeesData.push({ name, dept, checkIn, checkOut, statusBadge });
+        }
+
+        document.getElementById('statPresent').textContent = presentCount;
+        document.getElementById('statLeave').textContent = leaveCount;
+        document.getElementById('statLate').textContent = lateCount;
+        document.getElementById('statAbsent').textContent = absentCount;
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            data.forEach(emp => {
+                const row = `
+                    <tr>
+                        <td class="ps-4 text-dark">${emp.name}</td>
+                        <td class="text-secondary">${emp.dept}</td>
+                        <td>${emp.checkIn}</td>
+                        <td>${emp.checkOut}</td>
+                        <td class="pe-4">${emp.statusBadge}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        renderTable(employeesData);
+
+        document.getElementById('attendanceSearch').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const filtered = employeesData.filter(emp => emp.name.toLowerCase().includes(term) || emp.dept.toLowerCase().includes(term));
+            renderTable(filtered);
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
